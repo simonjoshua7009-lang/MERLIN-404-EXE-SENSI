@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090909">
+<title>MERLIN 404.EXE SENSI</title>
+<style>
+:root{--red:#ff2020;--bg:#080808;--muted:#aaa}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#300909 0,#090909 42%,#050505 100%);color:#fff;font-family:Arial,sans-serif;min-height:100vh}
+header{text-align:center;padding:28px 15px 16px}header h1{margin:0;color:var(--red);font-size:clamp(25px,6vw,38px);letter-spacing:2px;text-shadow:0 0 18px #f002}header p{color:#bbb;margin:8px 0}
+main{width:min(520px,92%);margin:12px auto 40px}.card{background:#111e;border:1px solid #4b1717;border-radius:16px;padding:22px;margin:14px 0;box-shadow:0 8px 30px #0008}
+h2{margin:0 0 14px;font-size:20px}label{display:block;color:#ddd;font-size:14px;margin:12px 0 6px}
+input,select{width:100%;padding:14px;border:1px solid #444;border-radius:9px;background:#080808;color:white;font-size:16px;outline:none}input:focus,select:focus{border-color:var(--red)}
+button,.linkbtn{display:block;width:100%;border:0;border-radius:9px;padding:14px;margin-top:12px;background:var(--red);color:white;font-weight:800;font-size:15px;text-align:center;text-decoration:none;cursor:pointer}
+.secondary{background:#292929;border:1px solid #555}.small{font-size:12px;color:var(--muted);line-height:1.5}.error{color:#ff7777;margin-top:10px}.hidden{display:none!important}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#090909;border:1px solid #333;border-radius:10px;padding:12px}.stat b{display:block;color:#ff4242;font-size:21px;margin-top:5px}
+.values{display:grid;grid-template-columns:1fr 1fr;gap:10px}.value{background:#090909;border:1px solid #333;padding:13px;border-radius:9px}.value span{display:block;color:#aaa;font-size:12px}.value strong{font-size:24px;color:#ff3434}
+footer{text-align:center;color:#777;font-size:12px;padding:18px}
+</style>
+</head>
+<body>
+<header><h1>MERLIN 404.EXE</h1><p>SENSITIVITY CONTROL PANEL</p></header>
+<main>
+<section class="card" id="login">
+<h2>🔐 BUYER KEY ACCESS</h2>
+<p class="small">Enter the unique access key purchased from MERLIN. Keys are verified securely by the server and expire automatically.</p>
+<label for="key">ACCESS KEY</label><input id="key" placeholder="Enter your buyer key" autocomplete="off" autocapitalize="characters">
+<button id="unlock">VERIFY &amp; UNLOCK</button>
+<a class="linkbtn secondary" id="getKey" href="https://vplink.in/member/dashboard" target="_blank" rel="noopener">GET KEY</a>
+<a class="linkbtn" id="buyKey" href="#" target="_blank" rel="noopener">BUY KEY ON WHATSAPP</a>
+<button class="secondary" id="showAdmin" type="button">ADMIN DASHBOARD</button>
+<p id="loginError" class="error" role="status"></p>
+</section>
+<section class="card hidden" id="adminPanel">
+  <h2>🛡️ MERLIN ADMIN DASHBOARD</h2>
+  <div id="adminLogin">
+    <p class="small">Sign in with your Supabase admin account. Your profile must have role = admin.</p>
+    <label for="adminEmail">ADMIN EMAIL</label><input id="adminEmail" type="email" autocomplete="username" placeholder="Your admin email">
+    <label for="adminPassword">ADMIN PASSWORD</label><input id="adminPassword" type="password" autocomplete="current-password" placeholder="Your admin password">
+    <button id="adminSignIn" type="button">ADMIN SIGN IN</button>
+  </div>
+  <div id="adminTools" class="hidden">
+    <p class="small">Generate a unique access key valid for 24 hours.</p>
+    <button id="createAccessKey" type="button">GENERATE 1-DAY ACCESS KEY</button>
+    <label for="generatedKey">GENERATED ACCESS KEY</label>
+    <input id="generatedKey" readonly placeholder="Your new key will appear here">
+    <button class="secondary" id="copyAccessKey" type="button">COPY ACCESS KEY</button>
+    <p id="adminStatus" class="small" role="status"></p>
+  </div>
+  <p id="adminError" class="error" role="status"></p>
+  <button class="secondary" id="adminLogout" type="button">ADMIN LOG OUT</button>
+  <button class="secondary" id="hideAdmin" type="button">BACK TO BUYER LOGIN</button>
+</section>
+<section class="card hidden" id="panel">
+<h2>⚡ SMART SENSITIVITY GENERATOR</h2>
+<div class="grid"><div class="stat">Detected RAM<b id="ram">Not available</b></div><div class="stat">Available site storage<b id="storage">Checking…</b></div></div>
+<p class="small">Browsers may hide exact phone RAM and total device storage. If detection is unavailable, choose your device specs below.</p>
+<label for="ramChoice">PHONE RAM</label>
+<select id="ramChoice"><option value="2">2 GB</option><option value="3">3 GB</option><option value="4" selected>4 GB</option><option value="6">6 GB</option><option value="8">8 GB</option><option value="12">12 GB or more</option></select>
+<label for="storageChoice">PHONE STORAGE</label>
+<select id="storageChoice"><option value="16">16 GB</option><option value="32">32 GB</option><option value="64" selected>64 GB</option><option value="128">128 GB</option><option value="256">256 GB or more</option></select>
+<label for="style">AIM STYLE</label>
+<select id="style"><option value="balanced">Balanced headshot</option><option value="fast">Fast drag</option><option value="steady">Steady aim</option></select>
+<button id="generate">GENERATE MY SENSITIVITY</button>
+<div id="results" class="hidden"><h2 style="margin-top:20px">YOUR RECOMMENDED SETTINGS</h2><div class="values" id="values"></div><p class="small">Use these as a starting point. Test in Training Ground and adjust gradually to your screen size, FPS and personal control.</p><button class="secondary" id="copy">COPY SETTINGS</button></div>
+<button class="secondary" id="logout">LOG OUT</button>
+</section>
+</main>
+<footer>MERLIN 404.EXE • Fan-made settings companion. Not affiliated with Garena.</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Replace with your Supabase project URL. Do NOT add the service_role key here.
+const SUPABASE_URL = "https://dnxfybgdacgmyfiovmsm.supabase.co";
+const VERIFY_FUNCTION_URL = SUPABASE_URL + "/functions/v1/verify-access-key";
+const SUPABASE_ANON_KEY = "sb_publishable_fkpheD5NsPMAI4IQF3scPg_HLM1xJ03";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const WHATSAPP_NUMBER = "2349064331052";
+const $ = id => document.getElementById(id);
+$("buyKey").href = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" +
+  encodeURIComponent("Hello, I want to buy a MERLIN 404.EXE SENSI access key.");
+let verificationExpiry = null;
+let activeKey = "";
+let expiryCheckTimer = null;
+async function verifyBuyerKey(key) {
+  const response = await fetch(VERIFY_FUNCTION_URL, {
+    method: "POST",
+    headers: {"Content-Type":"application/json", "apikey":SUPABASE_ANON_KEY, "Authorization":"Bearer "+SUPABASE_ANON_KEY},
+    body: JSON.stringify({key})
+  });
+  const result = await response.json();
+  if (!response.ok || !result.valid) throw new Error(result.message || "Invalid, revoked, or expired key.");
+  return result;
+}
+function lockExpiredKey() {
+  clearInterval(expiryCheckTimer); expiryCheckTimer = null; activeKey = ""; verificationExpiry = null;
+  $("panel").classList.add("hidden"); $("login").classList.remove("hidden"); $("key").value = "";
+  $("loginError").textContent = "Your access key has expired or been revoked. Please obtain a new key.";
+}
+
+// Admin dashboard: Supabase Auth session is required for the protected RPC.
+$("showAdmin").addEventListener("click", () => {
+  $("login").classList.add("hidden");
+  $("adminPanel").classList.remove("hidden");
+  $("adminError").textContent = "";
+});
+$("hideAdmin").addEventListener("click", () => {
+  $("adminPanel").classList.add("hidden");
+  $("login").classList.remove("hidden");
+});
+$("adminSignIn").addEventListener("click", async () => {
+  $("adminError").textContent = "";
+  $("adminStatus").textContent = "";
+  const email = $("adminEmail").value.trim();
+  const password = $("adminPassword").value;
+  if (!email || !password) {
+    $("adminError").textContent = "Enter your admin email and password.";
+    return;
+  }
+  $("adminSignIn").disabled = true;
+  $("adminSignIn").textContent = "SIGNING IN…";
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+    if (error) throw error;
+    if (!data.session) throw new Error("No admin session was created.");
+    $("adminLogin").classList.add("hidden");
+    $("adminTools").classList.remove("hidden");
+    $("adminError").textContent = "";
+    $("adminStatus").textContent = "Signed in. Generate a key when ready.";
+  } catch (err) {
+    $("adminError").textContent = err.message || "Admin sign-in failed.";
+  } finally {
+    $("adminSignIn").disabled = false;
+    $("adminSignIn").textContent = "ADMIN SIGN IN";
+  }
+});
+$("createAccessKey").addEventListener("click", async () => {
+  $("adminError").textContent = "";
+  $("adminStatus").textContent = "Generating your 24-hour key…";
+  $("createAccessKey").disabled = true;
+  try {
+    const { data, error } = await supabaseClient.rpc("admin_create_access_key");
+    if (error) throw error;
+    if (typeof data !== "string" || !data) {
+      throw new Error("The server did not return an access key. Check the SQL function return value.");
+    }
+    $("generatedKey").value = data;
+    $("adminStatus").textContent = "Key created. It expires 24 hours after generation.";
+  } catch (err) {
+    $("adminStatus").textContent = "";
+    $("adminError").textContent = err.message || "Could not generate the key.";
+  } finally {
+    $("createAccessKey").disabled = false;
+  }
+});
+$("copyAccessKey").addEventListener("click", async () => {
+  if (!$("generatedKey").value) {
+    $("adminError").textContent = "Generate an access key first.";
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText($("generatedKey").value);
+    $("adminStatus").textContent = "Access key copied.";
+  } catch (_err) {
+    $("adminError").textContent = "Copy unavailable. Select and copy the key manually.";
+  }
+});
+$("adminLogout").addEventListener("click", async () => {
+  await supabaseClient.auth.signOut();
+  $("adminLogin").classList.remove("hidden");
+  $("adminTools").classList.add("hidden");
+  $("adminPassword").value = "";
+  $("generatedKey").value = "";
+  $("adminStatus").textContent = "";
+  $("adminError").textContent = "Admin signed out.";
+});
+
+$("unlock").addEventListener("click", async () => {
+  const entered = $("key").value.trim();
+  $("loginError").textContent = "";
+  if (!entered) { $("loginError").textContent = "Enter your buyer key."; return; }
+  if (SUPABASE_URL.includes("YOUR-PROJECT-REF") || SUPABASE_ANON_KEY.includes("YOUR_")) {
+    $("loginError").textContent = "Website setup incomplete: add your Supabase URL and publishable key.";
+    return;
+  }
+  $("unlock").disabled = true; $("unlock").textContent = "VERIFYING…";
+  try {
+    const result = await verifyBuyerKey(entered);
+    activeKey = entered; verificationExpiry = result.expires_at || null;
+    $("login").classList.add("hidden"); $("panel").classList.remove("hidden");
+    $("loginError").textContent = "";
+    clearInterval(expiryCheckTimer);
+    expiryCheckTimer = setInterval(async () => {
+      if (!activeKey) return;
+      try {
+        const fresh = await verifyBuyerKey(activeKey);
+        verificationExpiry = fresh.expires_at || null;
+      } catch (_e) { lockExpiredKey(); }
+    }, 60000);
+  } catch (err) {
+    $("loginError").textContent = err.message || "Could not verify key. Check your connection and try again.";
+  } finally { $("unlock").disabled = false; $("unlock").textContent = "VERIFY & UNLOCK"; }
+});
+$("key").addEventListener("keydown", e => { if(e.key==="Enter") $("unlock").click(); });
+$("logout").onclick = () => { clearInterval(expiryCheckTimer); expiryCheckTimer=null; activeKey=""; $("panel").classList.add("hidden"); $("login").classList.remove("hidden"); $("key").value=""; verificationExpiry=null; };
+const deviceRam = navigator.deviceMemory;
+if(deviceRam){ $("ram").textContent = deviceRam + " GB (approx.)"; $("ramChoice").value = String([2,3,4,6,8,12].find(x=>x>=deviceRam)||12); }
+if(navigator.storage && navigator.storage.estimate){ navigator.storage.estimate().then(info=>{ $("storage").textContent = info.quota ? (info.quota/1073741824).toFixed(1)+" GB site quota" : "Not available"; }).catch(()=> $("storage").textContent="Not available"); }
+else $("storage").textContent="Not available";
+let currentSettings = "";
+$("generate").onclick = () => {
+  const ram=Number($("ramChoice").value), storage=Number($("storageChoice").value), style=$("style").value;
+  let base=ram<=3?88:ram<=4?92:ram<=6?95:97;
+  if(storage<=32)base-=2;if(style==="fast")base+=3;if(style==="steady")base-=5;
+  const clamp=n=>Math.max(0,Math.min(200,n));
+  const settings={"General":clamp(base),"Red Dot":clamp(base-4),"2x Scope":clamp(base-10),"4x Scope":clamp(base-17),"Sniper Scope":clamp(base-32),"Free Look":clamp(85+(ram>=6?3:0))};
+  $("values").innerHTML=Object.entries(settings).map(([k,v])=>`<div class="value"><span>${k}</span><strong>${v}</strong></div>`).join("");
+  currentSettings="MERLIN 404.EXE SENSITIVITY\n"+Object.entries(settings).map(([k,v])=>k+": "+v).join("\n")+"\nRAM: "+ram+" GB | Storage selected: "+storage+" GB";
+  $("results").classList.remove("hidden");
+};
+$("copy").onclick=async()=>{try{await navigator.clipboard.writeText(currentSettings);$("copy").textContent="COPIED!";}catch(e){$("copy").textContent="Copy unavailable — select settings manually.";}};
+</script>
+</body></html>
