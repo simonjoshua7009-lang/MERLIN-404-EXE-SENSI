@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#090909">
+<title>MERLIN 404.EXE SENSI</title>
+<style>
+:root{--red:#ff2020;--bg:#080808;--panel:#141414;--muted:#aaa}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at top,#300909 0,#090909 42%,#050505 100%);color:#fff;font-family:Arial,sans-serif;min-height:100vh}
+header{text-align:center;padding:28px 15px 16px}header h1{margin:0;color:var(--red);font-size:clamp(25px,6vw,38px);letter-spacing:2px;text-shadow:0 0 18px #f002}header p{color:#bbb;margin:8px 0}
+main{width:min(520px,92%);margin:12px auto 40px}.card{background:#111e;border:1px solid #4b1717;border-radius:16px;padding:22px;margin:14px 0;box-shadow:0 8px 30px #0008}
+h2{margin:0 0 14px;font-size:20px}label{display:block;color:#ddd;font-size:14px;margin:12px 0 6px}
+input,select{width:100%;padding:14px;border:1px solid #444;border-radius:9px;background:#080808;color:white;font-size:16px;outline:none}input:focus,select:focus{border-color:var(--red)}
+button,.linkbtn{display:block;width:100%;border:0;border-radius:9px;padding:14px;margin-top:12px;background:var(--red);color:white;font-weight:800;font-size:15px;text-align:center;text-decoration:none;cursor:pointer}
+.secondary{background:#292929;border:1px solid #555}.green{background:#087b43}.small{font-size:12px;color:var(--muted);line-height:1.5}.error{color:#ff7777;margin-top:10px}.hidden{display:none!important}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{background:#090909;border:1px solid #333;border-radius:10px;padding:12px}.stat b{display:block;color:#ff4242;font-size:21px;margin-top:5px}
+.values{display:grid;grid-template-columns:1fr 1fr;gap:10px}.value{background:#090909;border:1px solid #333;padding:13px;border-radius:9px}.value span{display:block;color:#aaa;font-size:12px}.value strong{font-size:24px;color:#ff3434}
+footer{text-align:center;color:#777;font-size:12px;padding:18px}
+</style>
+</head>
+<body>
+<header><h1>MERLIN 404.EXE</h1><p> SENSITIVITY CONTROL PANEL</p></header>
+<main>
+<section class="card" id="login">
+<h2>🔐 KEY ACCESS</h2>
+<p class="small">Enter your valid access key to unlock the sensitivity generator.</p>
+<label for="key">ACCESS KEY</label><input id="key" placeholder="Enter your key" autocomplete="off">
+<button id="unlock">UNLOCK PANEL</button>
+<a class="linkbtn secondary" id="getKey" href="#" target="_blank" rel="noopener">GET KEY</a>
+<a class="linkbtn" id="buyKey" href="#" target="_blank" rel="noopener">BUY KEY ON WHATSAPP</a>
+<p id="loginError" class="error"></p>
+</section>
+
+<section class="card hidden" id="panel">
+<h2>⚡ SMART SENSITIVITY GENERATOR</h2>
+<div class="grid">
+<div class="stat">Detected RAM<b id="ram">Not available</b></div>
+<div class="stat">Available site storage<b id="storage">Checking…</b></div>
+</div>
+<p class="small">Browsers may hide exact phone RAM and total device storage. If detection is unavailable, choose your device specs below.</p>
+<label for="ramChoice">PHONE RAM</label>
+<select id="ramChoice"><option value="2">2 GB</option><option value="3">3 GB</option><option value="4" selected>4 GB</option><option value="6">6 GB</option><option value="8">8 GB</option><option value="12">12 GB or more</option></select>
+<label for="storageChoice">PHONE STORAGE</label>
+<select id="storageChoice"><option value="16">16 GB</option><option value="32">32 GB</option><option value="64" selected>64 GB</option><option value="128">128 GB</option><option value="256">256 GB or more</option></select>
+<label for="style">AIM STYLE</label>
+<select id="style"><option value="balanced">Balanced headshot</option><option value="fast">Fast drag</option><option value="steady">Steady aim</option></select>
+<button id="generate">GENERATE MY SENSITIVITY</button>
+<div id="results" class="hidden">
+<h2 style="margin-top:20px">YOUR RECOMMENDED SETTINGS</h2>
+<div class="values" id="values"></div>
+<p class="small">Use these as a starting point. Test in Training Ground and adjust gradually to your screen size, FPS and personal control.</p>
+<button class="secondary" id="copy">COPY SETTINGS</button>
+</div>
+<button class="secondary" id="logout">LOG OUT</button>
+</section>
+</main>
+<footer>MERLIN 404.EXE • Fan-made settings companion. Not affiliated with Garena.</footer>
+<script>
+// SETUP: Replace these values before publishing.
+const GET_KEY_URL = "https://vplink.in/member/dashboard";
+const WHATSAPP_NUMBER = "2349064331052"; // country code + number, digits only
+// DEMO ONLY: This key list is visible in browser source. Use server-side/Supabase
+// validation before selling real keys or publishing a production version.
+const DEMO_KEYS = ["MERLIN-DEMO-2026"];
+
+document.getElementById("getKey").href = GET_KEY_URL;
+document.getElementById("buyKey").href =
+  "https://wa.me/" + WHATSAPP_NUMBER + "?text=" +
+  encodeURIComponent("Hello, I want to buy a MERLIN 404.EXE SENSI access key.");
+
+const $ = id => document.getElementById(id);
+$("unlock").addEventListener("click", () => {
+  const entered = $("key").value.trim();
+  if (DEMO_KEYS.includes(entered)) {
+    $("login").classList.add("hidden");
+    $("panel").classList.remove("hidden");
+    $("loginError").textContent = "";
+  } else {
+    $("loginError").textContent = "Invalid key. Tap GET KEY or BUY KEY to get access.";
+  }
+});
+$("key").addEventListener("keydown", e => { if(e.key==="Enter") $("unlock").click(); });
+$("logout").onclick = () => { $("panel").classList.add("hidden"); $("login").classList.remove("hidden"); $("key").value=""; };
+const deviceRam = navigator.deviceMemory;
+if(deviceRam){ $("ram").textContent = deviceRam + " GB (approx.)"; $("ramChoice").value = String([2,3,4,6,8,12].find(x=>x>=deviceRam)||12); }
+if(navigator.storage && navigator.storage.estimate){
+  navigator.storage.estimate().then(info=>{
+    if(info.quota){ $("storage").textContent = (info.quota/1073741824).toFixed(1)+" GB site quota"; }
+    else $("storage").textContent = "Not available";
+  }).catch(()=> $("storage").textContent="Not available");
+}else $("storage").textContent="Not available";
+
+let currentSettings = "";
+$("generate").onclick = () => {
+  const ram = Number($("ramChoice").value), storage = Number($("storageChoice").value);
+  const style = $("style").value;
+  // Conservative starting-point ranges; RAM/storage only modestly adjust the profile.
+  let base = ram<=3 ? 88 : ram<=4 ? 92 : ram<=6 ? 95 : 97;
+  if(storage<=32) base -= 2;
+  if(style==="fast") base += 3;
+  if(style==="steady") base -= 5;
+  const clamp = n => Math.max(0,Math.min(200,n));
+  const settings = {
+    "General":clamp(base),
+    "Red Dot":clamp(base-4),
+    "2x Scope":clamp(base-10),
+    "4x Scope":clamp(base-17),
+    "Sniper Scope":clamp(base-32),
+    "Free Look":clamp(85 + (ram>=6?3:0))
+  };
+  $("values").innerHTML = Object.entries(settings).map(([k,v]) =>
+    `<div class="value"><span>${k}</span><strong>${v}</strong></div>`).join("");
+  currentSettings = "MERLIN 404.EXE SENSITIVITY\\n" +
+    Object.entries(settings).map(([k,v])=>k+": "+v).join("\\n") +
+    "\\nRAM: "+ram+" GB | Storage selected: "+storage+" GB";
+  $("results").classList.remove("hidden");
+};
+$("copy").onclick = async () => {
+  try { await navigator.clipboard.writeText(currentSettings); $("copy").textContent="COPIED!"; }
+  catch(e){ $("copy").textContent="Copy unavailable — select settings manually."; }
+};
+</script>
+</body></html>
